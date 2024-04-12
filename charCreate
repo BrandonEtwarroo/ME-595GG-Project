@@ -1,0 +1,24 @@
+function character = charCreate(n)
+%charCreate - creates different characters with various traits
+%   num - order of character creation (used to make sure data is random)
+%   age - character's age (1-5; 1 is young, 5 is old)
+%   height - character's height (1-5, 1 is short, 5 is tall)
+%   bmi - character's weight (1-5, 1 is skinny, 5 is fat)
+
+%assign traits to characters following a normal distribution
+
+%find mu and sigma for values between 1-5
+%valRange = [1 2 3 4 5]';
+%muSigma = fitdist(valRange,'Normal'); %finds mu and sigma using valRange
+mu = 3;
+sigma = 1.58114
+
+%assign random values of traits along a normal distribution to characters
+for c1 = 1:n
+    person.num(c1) = c1;
+    person.age(c1) = normrnd(mu,sigma);
+    person.height(c1) = normrnd(mu,sigma);
+    person.bmi(c1) = normrnd(mu,sigma);
+end
+
+end
