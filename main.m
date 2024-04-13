@@ -3,24 +3,43 @@
 %delete previous data
 clear;clc;close all;
 
-%population density
+%total population density
 n = 100;
 
 %assign physical characteristic parameters
-character = charCreate(n);
+[charM,charF] = charCreate(n);
 
-% %apply preference equation to each agent
-% precNum = precEq(person,n);
+% choose random males and females
+numRandM = 10; %number of random males
+numRandF = 10; %number of random females
+[randM,randF] = randPeo(charM,charF,numRandM,numRandF);
+
+%calculate objective values of random males and females
+[objValM,objValF,percValM,percValF] = percEq(randM,randF);
+
+%plot values
+rating = linspace(1,5); %rating scale
+
+%objective values (male)
+pdM = fitdist(objValM','normal'); %probability distribution object (normal)
+pdfM = pdf(pdM,rating); %probability density function object (normal), rating from 1-5
+figure(1)
+plot(rating,pdfM);
+hold on
+
+%perceived values (f->m)
+pdM2 = fitdist(percValM','weibull') %probability distribution object (normal)
+pdfM2 = pdf(pdM2,rating); %probability density function object (normal), rating from 1-5
+plot(rating,pdfM2);
+
+% %objective values (female)
+% pdF = fitdist(objValF','normal'); %probability distribution object (normal)
+% pdfF = pdf(pdF,rating); %probability density function object (normal), rating from 1-5
+% figure(2)
+% plot(rating,pdfF);
+% hold on
 % 
-% %using the interp1 to map the perceived attractiveness values to 1-10
-% %might be able to put this block of code in the precNum function
-% origVal = [min(precNum),max(precNum)];
-% newVal = [1,10];
-% vq1 = round(interp1(origVal,newVal,precNum))'; %rounded values for discrete numbers
-% 
-% %data
-% mData = mean(vq1); %mean of the data
-% sDev = std (vq1); %standard deviation of the data (is this supposed to be noise?)
-% 
-% %graph the values
-% histfit(vq1) %makes a histogram and applies a density function to itplot(X,Y);
+% %perceived values (m->f)
+% pdF2 = fitdist(percValF','normal'); %probability distribution object (normal)
+% pdfF2 = pdf(pdF2,rating); %probability density function object (normal), rating from 1-5
+% plot(rating,pdfF2);
