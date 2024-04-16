@@ -3,8 +3,11 @@ function [randM,randF] = randPeo(charM,charF,numRandM,numRandF)
 %   randM - randomized order of males
 %   randF = randomized order of females
 
+%random number generator
+rng('default')
+
 %randomize order of males
-randMales = randi([1,length(charM.num)],[1,numRandM]); %x random numbers between 1 and amount of males
+randMales = randperm(length(charM.num),numRandM); %x random numbers between 1 and amount of males 
 for c1 = 1:length(randMales)
     randM.num(c1) = charM.num(randMales(c1));
     randM.age(c1) = charM.age(randMales(c1));
@@ -14,7 +17,8 @@ for c1 = 1:length(randMales)
 end
 
 %randomize order of females
-randFemales = randi([1,length(charF.num)],[1,numRandF]); %x random numbers between 1 and amount of females
+%FEMALE CHARACTERS CAN BE REPEATED
+randFemales = randperm(length(charF.num),numRandF); %x random numbers between 1 and amount of females
 for c2 = 1:length(randFemales)
     randF.num(c2) = charF.num(randFemales(c2));
     randF.age(c2) = charF.age(randFemales(c2));

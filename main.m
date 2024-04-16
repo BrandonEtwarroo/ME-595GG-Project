@@ -3,43 +3,37 @@
 %delete previous data
 clear;clc;close all;
 
-%total population density
-n = 100;
+%total population density (CHANGE)
+n = 10000;
 
-%assign physical characteristic parameters
-[charM,charF] = charCreate(n);
+%mean and standard deviation for character creation (CHANGE)
+mu = 0;
+sigma = 1;
 
-% choose random males and females
-numRandM = 10; %number of random males
-numRandF = 10; %number of random females
+%assign physical characteristic traits
+[charM,charF] = charCreate(n,mu,sigma);
+
+% choose random males and females (CHANGE)
+numRandM = 0.1*n; %number of random males (10% of population)
+numRandF = 0.1*n; %number of random females (10% of population
 [randM,randF] = randPeo(charM,charF,numRandM,numRandF);
 
-%calculate objective values of random males and females
-[objValM,objValF,percValM,percValF] = percEq(randM,randF);
+%perceived weight limits for males (a,b); a<b (CHANGE)
+aM = -1;
+bM = 1;
 
-%plot values
-rating = linspace(1,5); %rating scale
+%perceived weight limits for females (a,b); a<b (CHANGE)
+aF = -1;
+bF = 1;
 
-%objective values (male)
-pdM = fitdist(objValM','normal'); %probability distribution object (normal)
-pdfM = pdf(pdM,rating); %probability density function object (normal), rating from 1-5
-figure(1)
-plot(rating,pdfM);
-hold on
+%calculate objective perception values of random males and females
+[objValM,objValF,percValM,percValF] = percEq(randM,randF,aM,bM,aF,bF);
 
-%perceived values (f->m)
-pdM2 = fitdist(percValM','weibull') %probability distribution object (normal)
-pdfM2 = pdf(pdM2,rating); %probability density function object (normal), rating from 1-5
-plot(rating,pdfM2);
+%map attractiveness values to 1-5 scale
+objValM = interp1([min(objValM),max(objValM)],[1,5],objValM);
+objValF = interp1([min(objValF),max(objValF)],[1,5],objValF);
+percValM = interp1([min(percValM),max(percValM)],[1,5],percValM);
+percValF = interp1([min(percValF),max(percValF)],[1,5],percValF);
 
-% %objective values (female)
-% pdF = fitdist(objValF','normal'); %probability distribution object (normal)
-% pdfF = pdf(pdF,rating); %probability density function object (normal), rating from 1-5
-% figure(2)
-% plot(rating,pdfF);
-% hold on
-% 
-% %perceived values (m->f)
-% pdF2 = fitdist(percValF','normal'); %probability distribution object (normal)
-% pdfF2 = pdf(pdF2,rating); %probability density function object (normal), rating from 1-5
-% plot(rating,pdfF2);
+%graph attractiveness values
+gAttract(objValM,objValF,percValM,percValF)
